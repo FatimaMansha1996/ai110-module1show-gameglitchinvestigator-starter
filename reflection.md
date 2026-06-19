@@ -12,11 +12,26 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 Document at least 3 bugs you found. Add rows as needed.
 
-| Input | Expected Behavior | Actual Behavior | Console Output / Error |
-|-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+## Bug number 1 ##
+ When I first launched the game on Normal difficulty, the Settings sidebar said "Attempts allowed: 8," but the main game panel immediately displayed "Attempts left: 7" before I had made a single guess. This is wrong because the player loses an attempt before the game even begins. I expected the game to start by showing all 8 attempts available, matching the total shown in Settings, and to only count down to "attempts left" after each guess is actually submitted.
+
+
+ ## Bug number 2 ##
+
+When playing the game, the instructions clearly state to guess a number between 1 and 100, but when I entered a negative number, the game accepted it as a valid guess and responded with the hint "Go LOWER!" — telling me to guess an even smaller number, which makes no sense since the value was already below the allowed range. This is wrong because a negative number is outside the valid range and should never be treated as a real guess or given a directional hint. I expected the game to reject any input below 1 (or above 100) and show a clear error message telling the player they are not allowed to enter a negative or out-of-range number, and to ask them to enter a number between 1 and 100 instead.
+
+
+## Bug number 3 ##
+ While playing, I used the Developer Debug Info to confirm the secret number was 33, then tested the hints directly. When I entered a number lower than 33, the game told me to "Go LOWER!", and when I entered a number higher than 33, it told me to " Go HIGHER!" the exact opposite of what should happen. This is wrong because the hints are inverted: a guess below the secret should tell the player to go higher, and a guess above the secret should tell them to go lower. I expected the game to point me toward the correct number, so that guessing too low says "Go HIGHER" and guessing too high says "Go LOWER," allowing the hints to actually help narrow down the secret instead of leading the player in the wrong direction.
+ 
+## Bug Reproduction Logs ##
+
+| Input Used      | Expected Behavior     | Actual Behavior        | Console Error / Output |
+| --------------- | --------------------- | ---------------------- | ---------------------- |
+| New game        | "Attempts left: 8"    | "Attempts left: 7"     | None                   |
+| `-5`            | Error message shown   | Hint "Go LOWER!" shown | None                   |
+| Guess below 33  | Hint "Go HIGHER"      | Hint "Go LOWER"        | None                   |
+| Guess above 33  | Hint "Go LOWER"       | Hint "Go HIGHER"       | None                   |
 
 ---
 
