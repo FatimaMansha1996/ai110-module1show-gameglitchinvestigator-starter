@@ -38,7 +38,9 @@ When playing the game, the instructions clearly state to guess a number between 
 ## 2. How did you use AI as a teammate?
 
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
+Chatgpt and Claude
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
+
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
 
 ---

@@ -11,13 +11,12 @@ def get_range_for_difficulty(difficulty: str):
     return 1, 100
 
 
-def parse_guess(raw: str):
+def parse_guess(raw: str, low=1, high=100):
     if raw is None:
         return False, None, "Enter a guess."
 
     if raw == "":
         return False, None, "Enter a guess."
-
     try:
         if "." in raw:
             value = int(float(raw))
@@ -25,6 +24,9 @@ def parse_guess(raw: str):
             value = int(raw)
     except Exception:
         return False, None, "That is not a number."
+# FIXME: Logic breaks here 
+    if value < low or value > high:
+        return False, None, f"Enter a number between {low} and {high}."
 
     return True, value, None
 
@@ -32,12 +34,12 @@ def parse_guess(raw: str):
 def check_guess(guess, secret):
     if guess == secret:
         return "Win", "🎉 Correct!"
-
     try:
+        # FIXME: Logic breaks here 
         if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
+            return "Too High", "📉 Go LOWER!"
         else:
-            return "Too Low", "📉 Go LOWER!"
+            return "Too Low", "📈 Go HIGHER!"
     except TypeError:
         g = str(guess)
         if g == secret:
