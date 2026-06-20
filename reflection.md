@@ -38,10 +38,13 @@ When playing the game, the instructions clearly state to guess a number between 
 ## 2. How did you use AI as a teammate?
 
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-Chatgpt and Claude
+Chatgpt and Claude both. But i used Claude more than Chatgpt. I used it like a pair-programming partner: I described the bugs I saw while playing, and it helped trace them to the exact lines. I always checked its work myself by replaying the game or running pytest.
+
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
+When the hints were backwards, the AI said the messages in `check_guess` were swapped and fixed them so "Too High" returns "Go LOWER." I verified it by using the Debug Info to see the secret, guessing above and below it, and confirming the arrows were right — plus a pytest test that passed.
 
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
+For the negative-number bug, the AI added a range check that defaulted to 1–100. It looked fixed, but on Normal difficulty (1–50) I typed a number over 100 and still got "enter a number between 1 and 100." That showed the fix was incomplete, so we updated `app.py` to pass the real range. It taught me an AI fix can look done and still miss a case.
 
 ---
 

@@ -1,6 +1,7 @@
 import random
 import streamlit as st
 
+# COLLAB: AI (agent mode) refactored these functions into logic_utils.py; app.py now imports them
 from logic_utils import (
     get_range_for_difficulty,
     parse_guess,
@@ -40,6 +41,7 @@ if "attempts" not in st.session_state:
     # FIXED: changed from 1 to 0 because starting at 1 made the game show
     # "Attempts left: 7" before any guess (attempt_limit - 1). Starting at 0
     # shows the full count and only counts down after a guess is submitted.
+    # COLLAB: I reported the "7 before any guess" bug; AI traced it here and changed 1 to 0
     st.session_state.attempts = 0
 
 if "score" not in st.session_state:
@@ -55,6 +57,7 @@ st.subheader("Make a guess")
 
 st.info(
     # FIXED: show the actual {low}-{high} range for the chosen difficulty instead of a hardcoded "1 and 100"
+    # COLLAB: I asked AI to make the UI show the right range to match the difficulty fix
     f"Guess a number between {low} and {high}. "
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
@@ -95,7 +98,9 @@ if st.session_state.status != "playing":
 if submit:
     st.session_state.attempts += 1
 
-    ok, guess_int, err = parse_guess(raw_guess)
+    # FIXED: pass the difficulty's low/high so the range check uses the real range (e.g. 1-50 on Normal), not the default 1-100
+    # COLLAB: I caught that Normal still said "1 to 100"; AI fixed the call to pass low and high
+    ok, guess_int, err = parse_guess(raw_guess, low, high)
 
     if not ok:
         st.session_state.history.append(raw_guess)
@@ -103,10 +108,9 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        if st.session_state.attempts % 2 == 0:
-            secret = str(st.session_state.secret)
-        else:
-            secret = st.session_state.secret
+        # FIXED: keep secret as a number so hints don't break every other turn
+        # COLLAB: I noticed wrong hints on some turns; AI found the str() conversion and removed it
+        secret = st.session_state.secret
 
         outcome, message = check_guess(guess_int, secret)
 

@@ -62,6 +62,14 @@ def test_in_range_number_is_accepted():
     assert error is None
 
 
+# Bug: range check used default 1-100 instead of the difficulty's range.
+# On Normal (1-50), a guess of 75 must be rejected with a "1 and 50" message.
+def test_normal_range_rejects_above_50():
+    ok, _, error = parse_guess("75", 1, 50)
+    assert ok is False
+    assert "50" in error
+
+
 # --- Bug 3: difficulty ranges were wrong (Hard was narrower than Normal) ---
 # After the fix: Easy 1-20, Normal 1-50, Hard 1-100.
 
@@ -75,3 +83,19 @@ def test_normal_range():
 
 def test_hard_range_is_widest():
     assert get_range_for_difficulty("Hard") == (1, 100)
+
+
+# --- Bug 4: the except/fallback path (old string-secret turns) had reversed hints ---
+# Passing a string secret forces check_guess into its TypeError fallback.
+# After the fix that path must also point the right way.
+
+def test_string_secret_too_high_says_go_lower():
+    outcome, message = check_guess(60, "50")
+    assert outcome == "Too High"
+    assert "LOWER" in message.upper()
+
+
+def test_string_secret_too_low_says_go_higher():
+    outcome, message = check_guess(40, "50")
+    assert outcome == "Too Low"
+    assert "HIGHER" in message.upper()

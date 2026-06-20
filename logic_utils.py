@@ -1,8 +1,10 @@
+# COLLAB: I asked AI (agent mode) to refactor the core logic functions out of app.py into this module
 def get_range_for_difficulty(difficulty: str):
     """Return (low, high) inclusive range for a given difficulty."""
     if difficulty == "Easy":
         return 1, 20
     # FIXED: swapped Normal/Hard ranges so Hard is the widest (hardest), not narrower than Normal
+    # COLLAB: AI flagged that Hard was narrower than Normal; I decided to swap them and AI applied it
     if difficulty == "Normal":
         return 1, 50
     if difficulty == "Hard":
@@ -30,6 +32,7 @@ def parse_guess(raw: str, low=1, high=100):
         return False, None, "That is not a number."
 
     # FIXED: added range check so out-of-range numbers (e.g. negatives) are rejected instead of accepted as valid guesses
+    # COLLAB: I described the negative-number bug; AI located the missing check and wrote the fix
     if value < low or value > high:
         return False, None, f"Enter a number between {low} and {high}."
 
@@ -46,6 +49,7 @@ def check_guess(guess, secret):
         return "Win", "🎉 Correct!"
     try:
         # FIXED: swapped the hint messages so a too-high guess says "Go LOWER" and a too-low guess says "Go HIGHER"
+        # COLLAB: I spotted the reversed hints while playing; AI confirmed the cause and swapped the messages
         if guess > secret:
             return "Too High", "📉 Go LOWER!"
         else:
@@ -54,9 +58,11 @@ def check_guess(guess, secret):
         g = str(guess)
         if g == secret:
             return "Win", "🎉 Correct!"
+        # FIXED: swapped hints here too so too-high says "Go LOWER" and too-low says "Go HIGHER"
+        # COLLAB: AI found this fallback path still had the old reversed hints and fixed it to match
         if g > secret:
-            return "Too High", "📈 Go HIGHER!"
-        return "Too Low", "📉 Go LOWER!"
+            return "Too High", "📉 Go LOWER!"
+        return "Too Low", "📈 Go HIGHER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
